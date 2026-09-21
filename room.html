@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Photo Booth - LDR Photo Booth 💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/room.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📸</text></svg>">
+</head>
+<body>
+  <div class="container">
+    <!-- Status Bar -->
+    <header class="status-bar">
+      <div class="room-info">
+        <span class="room-id">Room: <span id="roomIdDisplay">---</span></span>
+      </div>
+      <div class="connection-status" id="connectionStatus">
+        <span class="status-dot"></span>
+        <span class="status-text">Connecting...</span>
+      </div>
+    </header>
+
+    <!-- Camera Preview Section -->
+    <section class="camera-section">
+      <div class="camera-grid" id="cameraGrid">
+        <!-- Your Camera -->
+        <div class="camera-frame self" id="selfCamera">
+          <video id="selfVideo" autoplay playsinline muted></video>
+          <div class="camera-label">Kamu</div>
+          <div class="camera-overlay" id="selfOverlay">
+            <span>📷</span>
+          </div>
+        </div>
+
+        <!-- Partner Camera -->
+        <div class="camera-frame partner" id="partnerCamera">
+          <video id="partnerVideo" autoplay playsinline></video>
+          <div class="camera-label">Pasangan</div>
+          <div class="camera-overlay waiting" id="partnerOverlay">
+            <div class="waiting-content">
+              <span class="waiting-icon">💭</span>
+              <span class="waiting-text">Menunggu pasangan...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls Section -->
+    <section class="controls-section">
+      <!-- Background Picker -->
+      <div class="picker-group">
+        <div class="picker-header">
+          <span class="picker-title">Background</span>
+        </div>
+        <div class="picker-scroll">
+          <button class="picker-item selected" data-bg="bg-default" title="Default">
+            <div class="bg-preview bg-preview-default"></div>
+          </button>
+          <button class="picker-item" data-bg="bg-gradient-pink" title="Sunset">
+            <div class="bg-preview bg-preview-pink"></div>
+          </button>
+          <button class="picker-item" data-bg="bg-gradient-blue" title="Ocean">
+            <div class="bg-preview bg-preview-blue"></div>
+          </button>
+          <button class="picker-item" data-bg="bg-hearts" title="Hearts">
+            <div class="bg-preview bg-preview-hearts"></div>
+          </button>
+          <button class="picker-item" data-bg="bg-stars" title="Stars">
+            <div class="bg-preview bg-preview-stars"></div>
+          </button>
+          <button class="picker-item" data-bg="bg-flowers" title="Flowers">
+            <div class="bg-preview bg-preview-flowers"></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Picker -->
+      <div class="picker-group">
+        <div class="picker-header">
+          <span class="picker-title">Filter</span>
+        </div>
+        <div class="picker-scroll">
+          <button class="picker-item selected" data-filter="filter-none" title="Original">
+            <div class="filter-preview">
+              <span>🌟</span>
+            </div>
+            <span class="picker-label">Original</span>
+          </button>
+          <button class="picker-item" data-filter="filter-bw" title="B&W">
+            <div class="filter-preview filter-bw-preview">
+              <span>⬛</span>
+            </div>
+            <span class="picker-label">B&W</span>
+          </button>
+          <button class="picker-item" data-filter="filter-vintage" title="Vintage">
+            <div class="filter-preview filter-vintage-preview">
+              <span>📜</span>
+            </div>
+            <span class="picker-label">Vintage</span>
+          </button>
+          <button class="picker-item" data-filter="filter-bright" title="Bright">
+            <div class="filter-preview filter-bright-preview">
+              <span>✨</span>
+            </div>
+            <span class="picker-label">Bright</span>
+          </button>
+          <button class="picker-item" data-filter="filter-warm" title="Warm">
+            <div class="filter-preview filter-warm-preview">
+              <span>🌅</span>
+            </div>
+            <span class="picker-label">Warm</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Layout Picker -->
+      <div class="picker-group">
+        <div class="picker-header">
+          <span class="picker-title">Layout</span>
+        </div>
+        <div class="picker-scroll">
+          <button class="picker-item selected" data-layout="layout-side" title="Side by Side">
+            <div class="layout-preview layout-side-preview"></div>
+            <span class="picker-label">Side</span>
+          </button>
+          <button class="picker-item" data-layout="layout-top-bottom" title="Top & Bottom">
+            <div class="layout-preview layout-top-bottom-preview"></div>
+            <span class="picker-label">Top</span>
+          </button>
+          <button class="picker-item" data-layout="layout-corner" title="Corner">
+            <div class="layout-preview layout-corner-preview"></div>
+            <span class="picker-label">Corner</span>
+          </button>
+          <button class="picker-item" data-layout="layout-polaroid" title="Polaroid">
+            <div class="layout-preview layout-polaroid-preview"></div>
+            <span class="picker-label">Polaroid</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Capture Button -->
+    <section class="capture-section">
+      <button id="captureBtn" class="btn-capture" disabled>
+        <span class="capture-icon">📸</span>
+        <span class="capture-text">Capture</span>
+      </button>
+      <p class="capture-hint" id="captureHint">Tunggu partner terhubung</p>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section" id="gallerySection">
+      <div class="gallery-header">
+        <h3>📷 Photos (<span id="captureCount">0</span>)</h3>
+        <button id="downloadAllBtn" class="btn-secondary btn-small hidden">Download All</button>
+      </div>
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="gallery-empty" id="galleryEmpty">
+          <span>📸</span>
+          <p>Belum ada foto</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Share Section -->
+    <section class="share-section">
+      <button id="shareLinkBtn" class="btn-secondary btn-block">
+        <span>🔗</span> Copy Link
+      </button>
+    </section>
+  </div>
+
+  <!-- Flash Overlay -->
+  <div id="flashOverlay" class="flash-overlay hidden"></div>
+
+  <!-- Modal for Preview -->
+  <div id="previewModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Preview</h3>
+        <button class="modal-close" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img id="previewImage" src="" alt="Captured Photo">
+      </div>
+      <div class="modal-footer">
+        <button id="downloadBtn" class="btn-primary">
+          <span>💾</span> Download
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Error Modal -->
+  <div id="errorModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header error">
+        <h3>Oops! 😢</h3>
+      </div>
+      <div class="modal-body">
+        <p id="errorMessage">Something went wrong</p>
+      </div>
+      <div class="modal-footer">
+        <button id="errorCloseBtn" class="btn-secondary">Tutup</button>
+        <button id="retryBtn" class="btn-primary">Coba Lagi</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/room.js"></script>
+</body>
+</html>
